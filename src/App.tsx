@@ -58,11 +58,27 @@ function App() {
     window.location.href = `mailto:${email}?subject=Workdays%20Report%20${monthName}&body=${encodeURIComponent(body)}`;
   }, [email, monthName, currentMonth, daysWorked, holidays, expenses]);
 
+  const [reminderDay, setReminderDay] = useState(() => {
+    return Number(localStorage.getItem("reminderDay")) || maxDay;
+  });
+  const [showReminderPanel, setShowReminderPanel] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("reminderDay", String(reminderDay));
+  }, [reminderDay]);
+
   return (
     <>
       <section id="center">
-        <Summary month={monthName} daysWorked={daysWorked} />
-{view === "back" ? (
+        <Summary
+          month={monthName}
+          daysWorked={daysWorked}
+          reminderDay={reminderDay}
+          showReminderPanel={showReminderPanel}
+          onToggleBell={() => setShowReminderPanel(!showReminderPanel)}
+          onChangeDay={setReminderDay}
+        />
+        {view === "back" ? (
           <Settings maxDay={maxDay} setMaxDay={setMaxDay} email={email} setEmail={setEmail} />
         ) : (
           <Calculator
