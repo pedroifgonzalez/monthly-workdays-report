@@ -34,5 +34,23 @@ export function addToCalendar(day: number) {
     "END:VCALENDAR",
   ].join("\r\n");
 
-  window.location.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const file = new File([blob], "workdays-report.ics", { type: "text/calendar;charset=utf-8" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: "WorkMonth" }).catch(() => download(blob));
+  } else {
+    download(blob);
+  }
+}
+
+function download(blob: Blob) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "workdays-report.ics";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }

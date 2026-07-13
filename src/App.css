@@ -101,6 +101,12 @@
   box-shadow: var(--shadow);
   font-size: 14px;
   text-align: left;
+
+  @media (max-width: 480px) {
+    right: 0;
+    min-width: auto;
+    width: 100%;
+  }
 }
 
 .reminder-panel label {
@@ -243,6 +249,14 @@
   padding: 0px;
   width: 40%;
   position: relative;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 }
 
 .row {
@@ -251,6 +265,10 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 }
 
 .row label {
@@ -311,6 +329,14 @@
   font-size: 200px;
   text-align: left;
   font-family: 'Italiana', serif;
+
+  @media (max-width: 1024px) {
+    font-size: 120px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 72px;
+  }
 }
 
 .right-content {
