@@ -21,8 +21,19 @@ export default function Footer({
           onClick={() => setView(view === "settings" ? "back" : "settings")}
           width={48}
           height={48}
+          title={view === "settings" ? "Settings" : "Back to calculator"}
+          alt={view === "settings" ? "Settings" : "Back to calculator"}
+          style={{ cursor: "pointer" }}
         />
-        <img src={send} onClick={onSendEmail} width={48} height={48} />
+        <img
+          src={send}
+          onClick={onSendEmail}
+          width={48}
+          height={48}
+          title="Send report by email"
+          alt="Send report by email"
+          style={{ cursor: "pointer" }}
+        />
       </div>
     </div>
   );

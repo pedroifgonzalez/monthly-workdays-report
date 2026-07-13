@@ -62,12 +62,12 @@ function App() {
     <>
       <section id="center">
         <Summary month={monthName} daysWorked={daysWorked} />
-        {view === "back" ? (
+{view === "back" ? (
           <Settings maxDay={maxDay} setMaxDay={setMaxDay} email={email} setEmail={setEmail} />
         ) : (
           <Calculator
             maxDay={maxDay}
-            holidays={holidays.length}
+            holidays={holidays}
             days={days}
             setDeductions={setDeductions}
             expenses={expenses}

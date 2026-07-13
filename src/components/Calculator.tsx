@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { DayInfo } from "../utils/date";
+import type { Holiday } from "../utils/holidays";
 
 export type Expense = { amount: number; description: string };
 
@@ -12,7 +13,7 @@ export default function Calculator({
   setExpenses,
 }: {
   maxDay: number;
-  holidays: number;
+  holidays: Holiday[];
   days: DayInfo[];
   setDeductions: (n: number) => void;
   expenses: Expense[];
@@ -100,7 +101,9 @@ export default function Calculator({
       </div>
       <div className="row">
         <label>Holidays</label>
-        <p>{holidays}</p>
+        <p title={holidays.map((h) => `${h.day}: ${h.name}`).join("\n")}>
+          {holidays.length}
+        </p>
       </div>
       {row(
         vacations,
