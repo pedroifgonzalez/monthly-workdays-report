@@ -16,24 +16,30 @@ export default function Footer({
   return (
     <div className="content">
       <div className="row">
-        <img
-          src={icon}
+        <div
+          className="footer-btn settings-btn"
           onClick={() => setView(view === "settings" ? "back" : "settings")}
-          width={48}
-          height={48}
           title={view === "settings" ? "Settings" : "Back to calculator"}
-          alt={view === "settings" ? "Settings" : "Back to calculator"}
-          style={{ cursor: "pointer" }}
-        />
-        <img
-          src={send}
+        >
+          <img
+            src={icon}
+            width={48}
+            height={48}
+            alt={view === "settings" ? "Settings" : "Back to calculator"}
+          />
+        </div>
+        <div
+          className="footer-btn send-btn"
           onClick={onSendEmail}
-          width={48}
-          height={48}
           title="Send report by email"
-          alt="Send report by email"
-          style={{ cursor: "pointer" }}
-        />
+        >
+          <img
+            src={send}
+            width={48}
+            height={48}
+            alt="Send report by email"
+          />
+        </div>
       </div>
     </div>
   );

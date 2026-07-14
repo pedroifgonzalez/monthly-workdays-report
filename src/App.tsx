@@ -14,6 +14,7 @@ import type { Expense } from "./components/Calculator";
 import { getNationalHolidays, type Holiday } from "./utils/holidays";
 import Settings from "./components/Settings";
 import { buildEmailBody } from "./utils/email";
+import WorkQuote from "./components/WorkQuote";
 
 function App() {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
@@ -42,6 +43,13 @@ function App() {
 
   const [deductions, setDeductions] = useState(0);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [vacations, setVacations] = useState(false);
+  const [vacationsCount, setVacationsCount] = useState(0);
+  const [sickDays, setSickDays] = useState(false);
+  const [sickDaysCount, setSickDaysCount] = useState(0);
+  const [absenceDays, setAbsenceDays] = useState(false);
+  const [absenceDaysCount, setAbsenceDaysCount] = useState(0);
+  const [hasExpenses, setHasExpenses] = useState(false);
   const daysWorked = defaultWorkableDays - deductions;
 
   const handleSendEmail = useCallback(() => {
@@ -88,8 +96,23 @@ function App() {
             setDeductions={setDeductions}
             expenses={expenses}
             setExpenses={setExpenses}
+            vacations={vacations}
+            setVacations={setVacations}
+            vacationsCount={vacationsCount}
+            setVacationsCount={setVacationsCount}
+            sickDays={sickDays}
+            setSickDays={setSickDays}
+            sickDaysCount={sickDaysCount}
+            setSickDaysCount={setSickDaysCount}
+            absenceDays={absenceDays}
+            setAbsenceDays={setAbsenceDays}
+            absenceDaysCount={absenceDaysCount}
+            setAbsenceDaysCount={setAbsenceDaysCount}
+            hasExpenses={hasExpenses}
+            setHasExpenses={setHasExpenses}
           />
         )}
+        <WorkQuote />
         <Footer view={view} setView={setView} onSendEmail={handleSendEmail} />
       </section>
     </>

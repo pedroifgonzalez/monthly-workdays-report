@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { DayInfo } from "../utils/date";
 import type { Holiday } from "../utils/holidays";
 
@@ -11,6 +11,20 @@ export default function Calculator({
   setDeductions,
   expenses,
   setExpenses,
+  vacations,
+  setVacations,
+  vacationsCount,
+  setVacationsCount,
+  sickDays,
+  setSickDays,
+  sickDaysCount,
+  setSickDaysCount,
+  absenceDays,
+  setAbsenceDays,
+  absenceDaysCount,
+  setAbsenceDaysCount,
+  hasExpenses,
+  setHasExpenses,
 }: {
   maxDay: number;
   holidays: Holiday[];
@@ -18,15 +32,21 @@ export default function Calculator({
   setDeductions: (n: number) => void;
   expenses: Expense[];
   setExpenses: (e: Expense[]) => void;
+  vacations: boolean;
+  setVacations: (v: boolean) => void;
+  vacationsCount: number;
+  setVacationsCount: (n: number) => void;
+  sickDays: boolean;
+  setSickDays: (v: boolean) => void;
+  sickDaysCount: number;
+  setSickDaysCount: (n: number) => void;
+  absenceDays: boolean;
+  setAbsenceDays: (v: boolean) => void;
+  absenceDaysCount: number;
+  setAbsenceDaysCount: (n: number) => void;
+  hasExpenses: boolean;
+  setHasExpenses: (v: boolean) => void;
 }) {
-  const [vacations, setVacations] = useState(false);
-  const [vacationsCount, setVacationsCount] = useState(0);
-  const [sickDays, setSickDays] = useState(false);
-  const [sickDaysCount, setSickDaysCount] = useState(0);
-  const [absenceDays, setAbsenceDays] = useState(false);
-  const [absenceDaysCount, setAbsenceDaysCount] = useState(0);
-
-  const [hasExpenses, setHasExpenses] = useState(false);
 
   useEffect(() => {
     const totalOff =
@@ -91,76 +111,81 @@ export default function Calculator({
 
   return (
     <div className="content view-box">
-      <div className="row">
-        <label>Total Days (1-{maxDay})</label>
-        <p>{days.length}</p>
-      </div>
-      <div className="row">
-        <label>Weekend Days</label>
-        <p>{days.filter((d) => d.isWeekend).length}</p>
-      </div>
-      <div className="row">
-        <label>Holidays</label>
-        <p title={holidays.map((h) => `${h.day}: ${h.name}`).join("\n")}>
-          {holidays.length}
-        </p>
-      </div>
-      {row(
-        vacations,
-        () => setVacations(!vacations),
-        vacationsCount,
-        setVacationsCount,
-        "Vacations",
-      )}
-      {row(
-        sickDays,
-        () => setSickDays(!sickDays),
-        sickDaysCount,
-        setSickDaysCount,
-        "Sick Days",
-      )}
-      {row(
-        absenceDays,
-        () => setAbsenceDays(!absenceDays),
-        absenceDaysCount,
-        setAbsenceDaysCount,
-        "Absence Days",
-      )}
-
-      <div className="row">
-        <label>
-          <input type="checkbox" checked={hasExpenses} onChange={() => setHasExpenses(!hasExpenses)} />
-          Expenses
-        </label>
-      </div>
-
-      {hasExpenses && (
-        <div className="expenses-list">
-          {expenses.map((e, i) => (
-            <div className="row expense-row" key={i}>
-              <input
-                className="expense-desc"
-                type="text"
-                placeholder="description"
-                value={e.description}
-                onChange={(ev) => updateExpense(i, "description", ev.target.value)}
-              />
-              <input
-                className="expense-amount"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-                value={e.amount || ""}
-                onChange={(ev) => updateExpense(i, "amount", ev.target.value === "" ? 0 : Number(ev.target.value))}
-              />
-              <span className="expense-currency">EUR</span>
-              <button className="expense-remove" onClick={() => removeExpense(i)}>x</button>
-            </div>
-          ))}
-          <button className="add-expense" onClick={addExpense}>+ Add expense</button>
+      <div className="readonly-section">
+        <div className="row">
+          <label>Total Days (1-{maxDay})</label>
+          <span className="readonly-value">{days.length}</span>
         </div>
-      )}
+        <div className="row">
+          <label>Weekend Days</label>
+          <span className="readonly-value">{days.filter((d) => d.isWeekend).length}</span>
+        </div>
+        <div className="row">
+          <label>Holidays</label>
+          <span className="readonly-value" title={holidays.map((h) => `${h.day}: ${h.name}`).join("\n")}>
+            {holidays.length}
+          </span>
+        </div>
+      </div>
+
+      <div className="input-section">
+        {row(
+          vacations,
+          () => setVacations(!vacations),
+          vacationsCount,
+          setVacationsCount,
+          "Vacations",
+        )}
+        {row(
+          sickDays,
+          () => setSickDays(!sickDays),
+          sickDaysCount,
+          setSickDaysCount,
+          "Sick Days",
+        )}
+        {row(
+          absenceDays,
+          () => setAbsenceDays(!absenceDays),
+          absenceDaysCount,
+          setAbsenceDaysCount,
+          "Absence Days",
+        )}
+
+        <div className="row">
+          <label>
+            <input type="checkbox" checked={hasExpenses} onChange={() => setHasExpenses(!hasExpenses)} />
+            Expenses
+          </label>
+        </div>
+
+        {hasExpenses && (
+          <div className="expenses-list">
+            {expenses.map((e, i) => (
+              <div className="row expense-row" key={i}>
+                <input
+                  className="expense-desc"
+                  type="text"
+                  placeholder="description"
+                  value={e.description}
+                  onChange={(ev) => updateExpense(i, "description", ev.target.value)}
+                />
+                <input
+                  className="expense-amount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={e.amount || ""}
+                  onChange={(ev) => updateExpense(i, "amount", ev.target.value === "" ? 0 : Number(ev.target.value))}
+                />
+                <span className="expense-currency">EUR</span>
+                <button className="expense-remove" onClick={() => removeExpense(i)}>x</button>
+              </div>
+            ))}
+            <button className="add-expense" onClick={addExpense}>+ Add expense</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

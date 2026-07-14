@@ -16,6 +16,8 @@ export default function Summary({
   onToggleBell: () => void;
   onChangeDay: (n: number) => void;
 }) {
+  const sizeClass = month.length > 7 ? "long" : month.length > 4 ? "medium" : "short";
+
   return (
     <div className="content">
       <img
@@ -43,10 +45,12 @@ export default function Summary({
           </button>
         </div>
       )}
-      <h1 className="left-content">{month}</h1>
-      <div className="right-content">
-        <h2>Worked Days</h2>
-        <h2>{daysWorked}</h2>
+      <div className="readonly-section">
+        <h1 className={"left-content " + sizeClass}>{month}</h1>
+        <div className="right-content">
+          <h2>Worked Days</h2>
+          <h2 className="highlight-number">{daysWorked}</h2>
+        </div>
       </div>
     </div>
   );
