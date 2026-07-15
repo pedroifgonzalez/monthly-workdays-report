@@ -83,6 +83,7 @@ export default function Calculator({
           min="0"
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
+          style={{ opacity: checked ? 1 : 0.4 }}
         />
       </div>
     );

@@ -128,6 +128,7 @@ input[type="number"] {
   outline: none;
   width: auto;
   -moz-appearance: textfield;
+  text-align: right;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -304,6 +305,10 @@ input[type="text"]:focus {
 .readonly-value {
   font-weight: 500;
   color: var(--text-h);
+  font-family: var(--mono);
+  font-size: 15px;
+  text-align: right;
+  width: 68px;
 }
 
 .content {
@@ -447,7 +452,16 @@ input[type="text"]:focus {
 
 .row input[type="number"] {
   width: 68px;
-  text-align: center;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 15px;
+}
+
+.card input[type="text"] {
+  width: 180px;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 15px;
 }
 
 .expenses-list {
@@ -476,7 +490,6 @@ input[type="text"]:focus {
 
 .expense-amount {
   width: 80px;
-  text-align: right;
   min-width: 0;
 }
 
