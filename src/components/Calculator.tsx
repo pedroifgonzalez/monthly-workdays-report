@@ -5,7 +5,6 @@ import type { Holiday } from "../utils/holidays";
 export type Expense = { amount: number; description: string };
 
 export default function Calculator({
-  maxDay,
   holidays,
   days,
   setDeductions,
@@ -19,14 +18,22 @@ export default function Calculator({
   setSickDays,
   sickDaysCount,
   setSickDaysCount,
-  absenceDays,
-  setAbsenceDays,
-  absenceDaysCount,
-  setAbsenceDaysCount,
   hasExpenses,
   setHasExpenses,
+  prevVacations,
+  setPrevVacations,
+  prevVacationsCount,
+  setPrevVacationsCount,
+  prevSickDays,
+  setPrevSickDays,
+  prevSickDaysCount,
+  setPrevSickDaysCount,
+  prevAbsenceDays,
+  setPrevAbsenceDays,
+  prevAbsenceDaysCount,
+  setPrevAbsenceDaysCount,
+  prevMonthName,
 }: {
-  maxDay: number;
   holidays: Holiday[];
   days: DayInfo[];
   setDeductions: (n: number) => void;
@@ -40,27 +47,42 @@ export default function Calculator({
   setSickDays: (v: boolean) => void;
   sickDaysCount: number;
   setSickDaysCount: (n: number) => void;
-  absenceDays: boolean;
-  setAbsenceDays: (v: boolean) => void;
-  absenceDaysCount: number;
-  setAbsenceDaysCount: (n: number) => void;
   hasExpenses: boolean;
   setHasExpenses: (v: boolean) => void;
+  prevVacations: boolean;
+  setPrevVacations: (v: boolean) => void;
+  prevVacationsCount: number;
+  setPrevVacationsCount: (n: number) => void;
+  prevSickDays: boolean;
+  setPrevSickDays: (v: boolean) => void;
+  prevSickDaysCount: number;
+  setPrevSickDaysCount: (n: number) => void;
+  prevAbsenceDays: boolean;
+  setPrevAbsenceDays: (v: boolean) => void;
+  prevAbsenceDaysCount: number;
+  setPrevAbsenceDaysCount: (n: number) => void;
+  prevMonthName: string;
 }) {
 
   useEffect(() => {
     const totalOff =
       (vacations ? vacationsCount : 0) +
       (sickDays ? sickDaysCount : 0) +
-      (absenceDays ? absenceDaysCount : 0);
+      (prevVacations ? prevVacationsCount : 0) +
+      (prevSickDays ? prevSickDaysCount : 0) +
+      (prevAbsenceDays ? prevAbsenceDaysCount : 0);
     setDeductions(totalOff);
   }, [
     vacations,
     vacationsCount,
     sickDays,
     sickDaysCount,
-    absenceDays,
-    absenceDaysCount,
+    prevVacations,
+    prevVacationsCount,
+    prevSickDays,
+    prevSickDaysCount,
+    prevAbsenceDays,
+    prevAbsenceDaysCount,
     setDeductions,
   ]);
 
@@ -114,7 +136,7 @@ export default function Calculator({
     <div className="content view-box">
       <div className="readonly-section">
         <div className="row">
-          <label>Total Days (1-{maxDay})</label>
+          <label>Total Days</label>
           <span className="readonly-value">{days.length}</span>
         </div>
         <div className="row">
@@ -143,13 +165,6 @@ export default function Calculator({
           sickDaysCount,
           setSickDaysCount,
           "Sick Days",
-        )}
-        {row(
-          absenceDays,
-          () => setAbsenceDays(!absenceDays),
-          absenceDaysCount,
-          setAbsenceDaysCount,
-          "Absence Days",
         )}
 
         <div className="row">
@@ -185,6 +200,31 @@ export default function Calculator({
             ))}
             <button className="add-expense" onClick={addExpense}>+ Add expense</button>
           </div>
+        )}
+
+        <div className="row" style={{ marginTop: 12, fontWeight: 500, color: "var(--text-h)" }}>
+          <label>Not counted days of {prevMonthName}</label>
+        </div>
+        {row(
+          prevVacations,
+          () => setPrevVacations(!prevVacations),
+          prevVacationsCount,
+          setPrevVacationsCount,
+          "Vacation days",
+        )}
+        {row(
+          prevSickDays,
+          () => setPrevSickDays(!prevSickDays),
+          prevSickDaysCount,
+          setPrevSickDaysCount,
+          "Sickness days",
+        )}
+        {row(
+          prevAbsenceDays,
+          () => setPrevAbsenceDays(!prevAbsenceDays),
+          prevAbsenceDaysCount,
+          setPrevAbsenceDaysCount,
+          "Absence days",
         )}
       </div>
     </div>

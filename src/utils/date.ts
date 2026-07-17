@@ -15,9 +15,14 @@ function getCurrentYear(): number {
   return new Date().getFullYear();
 }
 
-function getDaysUpTo(month: number, year: number, maxDay: number): DayInfo[] {
+function getLastDayOfMonth(month: number, year: number): number {
+  return new Date(year, month, 0).getDate();
+}
+
+function getDaysUpTo(month: number, year: number): DayInfo[] {
+  const lastDay = getLastDayOfMonth(month, year);
   const days: DayInfo[] = [];
-  for (let d = 1; d <= maxDay; d++) {
+  for (let d = 1; d <= lastDay; d++) {
     const date = new Date(year, month - 1, d);
     const isWeekend = date.getDay() === 0 || date.getDay() === 6;
     days.push({ day: d, isWeekend });

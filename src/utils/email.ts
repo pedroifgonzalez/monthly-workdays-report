@@ -4,17 +4,21 @@ import type { Expense } from "../components/Calculator";
 export type EmailData = {
   monthName: string;
   monthNumber: number;
+  prevMonthName: string;
   daysWorked: number;
   vacationDays: number;
   sickDays: number;
   absenceDays: number;
+  prevVacationDays: number;
+  prevSickDays: number;
+  prevAbsenceDays: number;
   holidays: Holiday[];
   expenses: Expense[];
 };
 
 export function buildEmailBody(data: EmailData): string {
   const mm = String(data.monthNumber).padStart(2, "0");
-  const holidayLines = data.holidays
+  const holidayText = data.holidays
     .map((h) => `· Public Holidays : 01 (${String(h.day).padStart(2, "0")}/${mm})`)
     .join("\n");
 
@@ -27,16 +31,28 @@ export function buildEmailBody(data: EmailData): string {
     `Please find below the totals for this month :`,
     ``,
     `· Days worked : ${data.daysWorked}`,
-    `· Vacation Days : ${data.vacationDays}`,
-    `· Sickness days : ${data.sickDays}`,
-    holidayLines,
-    `· Absence days : ${data.absenceDays}`,
   ];
 
-  if (data.expenses.length > 0) {
+  if (data.vacationDays > 0) lines.push(`· Vacation Days : ${data.vacationDays}`);
+  if (data.sickDays > 0) lines.push(`· Sickness days : ${data.sickDays}`);
+  if (holidayText) lines.push(holidayText);
+  if (data.absenceDays > 0) lines.push(`· Absence days : ${data.absenceDays}`);
+
+  if (totalAmount > 0 || data.expenses.length > 0) {
+    lines.push(`· Expenses : €${totalAmount.toFixed(2)}`);
+    if (expenseLines) lines.push(expenseLines);
+  }
+
+  const prevLines: string[] = [];
+  if (data.prevVacationDays > 0) prevLines.push(`o Vacation days : ${data.prevVacationDays}`);
+  if (data.prevSickDays > 0) prevLines.push(`o Sickness days : ${data.prevSickDays}`);
+  if (data.prevAbsenceDays > 0) prevLines.push(`o Absence days : ${data.prevAbsenceDays}`);
+  if (prevLines.length > 0) {
     lines.push(
-      `· Expenses : €${totalAmount.toFixed(2)}`,
-      expenseLines,
+      ``,
+      ``,
+      `· Not counted days of previous month (because after you write me the totals, you still can get sick or need a vacation day)`,
+      ...prevLines,
     );
   }
 

@@ -22,15 +22,14 @@ function App() {
   const currentMonth = getCurrentMonthNumber();
   const currentYear = getCurrentYear();
   const monthName = getCurrentMonth();
-  const [maxDay, setMaxDay] = useState(25);
 
   useEffect(() => {
     getNationalHolidays(currentMonth).then(setHolidays);
   }, [currentMonth]);
 
   const days = useMemo(
-    () => getDaysUpTo(currentMonth, currentYear, maxDay),
-    [currentMonth, currentYear, maxDay],
+    () => getDaysUpTo(currentMonth, currentYear),
+    [currentMonth, currentYear],
   );
 
   const defaultWorkableDays = useMemo(
@@ -47,27 +46,38 @@ function App() {
   const [vacationsCount, setVacationsCount] = useState(0);
   const [sickDays, setSickDays] = useState(false);
   const [sickDaysCount, setSickDaysCount] = useState(0);
-  const [absenceDays, setAbsenceDays] = useState(false);
-  const [absenceDaysCount, setAbsenceDaysCount] = useState(0);
   const [hasExpenses, setHasExpenses] = useState(false);
+  const [prevVacations, setPrevVacations] = useState(false);
+  const [prevVacationsCount, setPrevVacationsCount] = useState(0);
+  const [prevSickDays, setPrevSickDays] = useState(false);
+  const [prevSickDaysCount, setPrevSickDaysCount] = useState(0);
+  const [prevAbsenceDays, setPrevAbsenceDays] = useState(false);
+  const [prevAbsenceDaysCount, setPrevAbsenceDaysCount] = useState(0);
   const daysWorked = defaultWorkableDays - deductions;
+
+  const prevMonthNumber = currentMonth === 1 ? 12 : currentMonth - 1;
+  const prevMonthName = new Date(2024, prevMonthNumber - 1).toLocaleString("default", { month: "long" });
 
   const handleSendEmail = useCallback(() => {
     const body = buildEmailBody({
       monthName,
       monthNumber: currentMonth,
+      prevMonthName,
       daysWorked,
-      vacationDays: 0,
-      sickDays: 0,
+      vacationDays: vacations ? vacationsCount : 0,
+      sickDays: sickDays ? sickDaysCount : 0,
       absenceDays: 0,
+      prevVacationDays: prevVacations ? prevVacationsCount : 0,
+      prevSickDays: prevSickDays ? prevSickDaysCount : 0,
+      prevAbsenceDays: prevAbsenceDays ? prevAbsenceDaysCount : 0,
       holidays,
       expenses,
     });
     window.location.href = `mailto:${email}?subject=Workdays%20Report%20${monthName}&body=${encodeURIComponent(body)}`;
-  }, [email, monthName, currentMonth, daysWorked, holidays, expenses]);
+  }, [email, monthName, currentMonth, prevMonthName, daysWorked, vacations, vacationsCount, sickDays, sickDaysCount, prevVacations, prevVacationsCount, prevSickDays, prevSickDaysCount, prevAbsenceDays, prevAbsenceDaysCount, holidays, expenses]);
 
   const [reminderDay, setReminderDay] = useState(() => {
-    return Number(localStorage.getItem("reminderDay")) || maxDay;
+    return Number(localStorage.getItem("reminderDay")) || 25;
   });
   const [showReminderPanel, setShowReminderPanel] = useState(false);
 
@@ -87,10 +97,9 @@ function App() {
           onChangeDay={setReminderDay}
         />
         {view === "back" ? (
-          <Settings maxDay={maxDay} setMaxDay={setMaxDay} email={email} setEmail={setEmail} />
+          <Settings email={email} setEmail={setEmail} />
         ) : (
           <Calculator
-            maxDay={maxDay}
             holidays={holidays}
             days={days}
             setDeductions={setDeductions}
@@ -104,12 +113,21 @@ function App() {
             setSickDays={setSickDays}
             sickDaysCount={sickDaysCount}
             setSickDaysCount={setSickDaysCount}
-            absenceDays={absenceDays}
-            setAbsenceDays={setAbsenceDays}
-            absenceDaysCount={absenceDaysCount}
-            setAbsenceDaysCount={setAbsenceDaysCount}
             hasExpenses={hasExpenses}
             setHasExpenses={setHasExpenses}
+            prevVacations={prevVacations}
+            setPrevVacations={setPrevVacations}
+            prevVacationsCount={prevVacationsCount}
+            setPrevVacationsCount={setPrevVacationsCount}
+            prevSickDays={prevSickDays}
+            setPrevSickDays={setPrevSickDays}
+            prevSickDaysCount={prevSickDaysCount}
+            setPrevSickDaysCount={setPrevSickDaysCount}
+            prevAbsenceDays={prevAbsenceDays}
+            setPrevAbsenceDays={setPrevAbsenceDays}
+            prevAbsenceDaysCount={prevAbsenceDaysCount}
+            setPrevAbsenceDaysCount={setPrevAbsenceDaysCount}
+            prevMonthName={prevMonthName}
           />
         )}
         <WorkQuote />
