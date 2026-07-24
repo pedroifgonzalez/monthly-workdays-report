@@ -38,6 +38,7 @@ function App() {
   );
 
   const [email, setEmail] = useState("admin@quasas.be");
+  const [hideZeros, setHideZeros] = useState(false);
   const [view, setView] = useState("settings");
 
   const [deductions, setDeductions] = useState(0);
@@ -56,7 +57,10 @@ function App() {
   const daysWorked = defaultWorkableDays - deductions;
 
   const prevMonthNumber = currentMonth === 1 ? 12 : currentMonth - 1;
-  const prevMonthName = new Date(2024, prevMonthNumber - 1).toLocaleString("default", { month: "long" });
+  const prevMonthName = new Date(2024, prevMonthNumber - 1).toLocaleString(
+    "default",
+    { month: "long" },
+  );
 
   const handleSendEmail = useCallback(() => {
     const body = buildEmailBody({
@@ -72,9 +76,29 @@ function App() {
       prevAbsenceDays: prevAbsenceDays ? prevAbsenceDaysCount : 0,
       holidays,
       expenses,
+      hideZeros,
     });
     window.location.href = `mailto:${email}?subject=Workdays%20Report%20${monthName}&body=${encodeURIComponent(body)}`;
-  }, [email, monthName, currentMonth, prevMonthName, daysWorked, vacations, vacationsCount, sickDays, sickDaysCount, prevVacations, prevVacationsCount, prevSickDays, prevSickDaysCount, prevAbsenceDays, prevAbsenceDaysCount, holidays, expenses]);
+  }, [
+    email,
+    monthName,
+    currentMonth,
+    prevMonthName,
+    daysWorked,
+    vacations,
+    vacationsCount,
+    sickDays,
+    sickDaysCount,
+    prevVacations,
+    prevVacationsCount,
+    prevSickDays,
+    prevSickDaysCount,
+    prevAbsenceDays,
+    prevAbsenceDaysCount,
+    holidays,
+    expenses,
+    hideZeros,
+  ]);
 
   const [reminderDay, setReminderDay] = useState(() => {
     return Number(localStorage.getItem("reminderDay")) || 25;
@@ -97,7 +121,12 @@ function App() {
           onChangeDay={setReminderDay}
         />
         {view === "back" ? (
-          <Settings email={email} setEmail={setEmail} />
+          <Settings
+            email={email}
+            setEmail={setEmail}
+            hideZeros={hideZeros}
+            setHideZeros={setHideZeros}
+          />
         ) : (
           <Calculator
             holidays={holidays}
