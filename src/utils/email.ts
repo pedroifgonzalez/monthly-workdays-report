@@ -64,7 +64,7 @@ export function buildEmailBody(data: EmailData): string {
     lines.push(
       ``,
       ``,
-      `· Not counted days of previous month (because after you write me the totals, you still can get sick or need a vacation day)`,
+      `· Not counted days of previous month`,
       ...prevLines,
     );
   }
